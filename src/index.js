@@ -1,7 +1,7 @@
-
+import Notiflix from 'notiflix';
 
 const KEY = "29287796-23bbe14638002cbdb41caa9be"
-// const serch = "dog"
+
 const image_type = "photo"
 const orientation = "horizontal"
 const safesearch = "true"
@@ -11,26 +11,37 @@ const form = document.querySelector(".search-form")
 const div = document.querySelector(".gallery")
 const inputSerch = document.querySelector(".search-form__input")
 const loadMoreBtnEl = document.querySelector(".load-more")
-// const url = `https://pixabay.com/api/?key=${KEY}&q=${input}&image_type=${image_type}&orientation=${orientation}&safesearch=${true}&per_page=${40}`
+let currentPage = 1;
 
 const updateUi = () => {
   div.innerHTML = "";
 };
 
-
 const createUrl = (e) => {
   e.preventDefault();
   const input = inputSerch.value;
-  const url = `https://pixabay.com/api/?key=${KEY}&q=${input}&image_type=${image_type}&orientation=${orientation}&safesearch=${true}&per_page=${40}`;
+  const url = `https://pixabay.com/api/?key=${KEY}&q=${input}&image_type=${image_type}&orientation=${orientation}&safesearch=${true}&per_page=${40}&page=${currentPage}`;
   fetch(url)
   .then((response) => response.json()
   )
     .then((data) => {
-      updateUi()
+      currentPage += 1
+      if (e.type === "submit") {
+        updateUi()
+      }
+      
       insertContent(data.hits)
+
+      if (per_page < data.total) {
+        loadMoreBtnEl.classList.remove("is-hidden");
+      }
     })
   .catch((error) => { console.log(error) })
 };
+
+
+
+
 
 form.addEventListener("submit", createUrl);
 loadMoreBtnEl.addEventListener("click", createUrl);

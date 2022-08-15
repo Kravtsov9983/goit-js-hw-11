@@ -72,7 +72,7 @@ input {
 }
 
 .search-form__btn {
-  cursor: pointer3;
+  cursor: pointer;
   position: absolute;
   top: 0;
   right: 0;
