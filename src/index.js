@@ -1,4 +1,6 @@
 import Notiflix from 'notiflix';
+const axios = require('axios').default;
+
 
 const KEY = "29287796-23bbe14638002cbdb41caa9be"
 
@@ -20,7 +22,11 @@ const updateUi = () => {
 const createUrl = (e) => {
   e.preventDefault();
   const input = inputSerch.value;
-  const url = `https://pixabay.com/api/?key=${KEY}&q=${input}&image_type=${image_type}&orientation=${orientation}&safesearch=${true}&per_page=${40}&page=${currentPage}`;
+
+  if (input === "") {
+    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+  } else {
+    const url = `https://pixabay.com/api/?key=${KEY}&q=${input}&image_type=${image_type}&orientation=${orientation}&safesearch=${true}&per_page=${40}&page=${currentPage}`;
   fetch(url)
   .then((response) => response.json()
   )
@@ -28,6 +34,9 @@ const createUrl = (e) => {
       currentPage += 1
       if (e.type === "submit") {
         updateUi()
+      }
+      if (data.total === 0) {
+        Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
       }
       
       insertContent(data.hits)
@@ -37,6 +46,8 @@ const createUrl = (e) => {
       }
     })
   .catch((error) => { console.log(error) })
+  }
+  
 };
 
 
